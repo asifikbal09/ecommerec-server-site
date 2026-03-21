@@ -3,6 +3,7 @@ import cors from 'cors';
 import config from './config';
 import globalErrorHandler from './app/middlewaress/globalErrorHandler';
 import notFound from './app/middlewaress/notFound';
+import router from './app/routes';
 
 const app: Application = express();
 app.use(cors());
@@ -21,6 +22,7 @@ app.get('/', (req: Request, res: Response) => {
     })
 });
 
+app.use("/api/v1",router)
 
 app.use(globalErrorHandler);
 

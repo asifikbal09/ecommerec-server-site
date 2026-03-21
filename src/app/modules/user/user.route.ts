@@ -1,0 +1,25 @@
+import { Router } from "express";
+import type { Router as ExpressRouter, NextFunction, Request, Response } from "express";
+import { UserController } from "./user.controller";
+import { UserValidation } from "./user.validation";
+import { fileUploader } from "../../helper/fileUploader";
+
+const router = Router();
+
+router.post(
+  "/create-user",
+fileUploader.upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+    console.log("object")
+    console.log({req})
+    req.body = UserValidation.createUserValidationSchema.parse(
+      JSON.parse(req.body.data),
+    );
+
+    next();
+  },
+
+  UserController.createUser,
+);
+
+export const UserRoutes:ExpressRouter = router;
