@@ -4,6 +4,7 @@ import { prisma } from "../../../lib/prisma";
 import  httpStatus  from "http-status";
 import ApiError from "../../error/ApiError";
 import { JwtHelpers } from "../../helper/jwtHelper";
+import { IUserPayload } from "../user/user.interface";
 
 
 const login = async (payload: { email: string; password: string }) => {
@@ -39,6 +40,41 @@ const login = async (payload: { email: string; password: string }) => {
   };
 };
 
+const passwordChange = async ({oldPassword, newPassword}: {oldPassword: string, newPassword: string},user: IUserPayload) => {
+    const userInfo = await prisma.user.findUniqueOrThrow({
+        where:{
+            email: user.email
+        }
+    })
+
+    const isCorrectPassword = await bcrypt.compare(
+        oldPassword,
+        userInfo.password,
+    );
+
+    if (!isCorrectPassword) {
+        throw new ApiError(httpStatus.UNAUTHORIZED, "Invalid credentials");
+    }
+
+    const hashedNewPassword = await bcrypt.hash(
+        newPassword,
+        Number(config.salt_rounds)
+    );
+
+    const result = await prisma.user.update({
+        where: {
+            email: user.email
+        },
+        data: {
+            password: hashedNewPassword,
+            isPasswordChanged: true
+        }
+    });
+
+    return result;
+};
+
 export const AuthService = {
   login,
+  passwordChange
 };
