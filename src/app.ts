@@ -1,15 +1,29 @@
-import express, { type Application, type Request, type Response } from "express";
-import cors from "cors";
+import express, { Application, NextFunction, Request, Response } from 'express';
+import cors from 'cors';
+import config from './config';
+import globalErrorHandler from './app/middlewaress/globalErrorHandler';
+import notFound from './app/middlewaress/notFound';
 
-const app:Application = express();
-
+const app: Application = express();
 app.use(cors());
-app.use(express.json());
 
-app.get("/", (req:Request, res:Response) => {
-  res.send("Hello World!");
+//parser
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+
+app.get('/', (req: Request, res: Response) => {
+    res.send({
+        message: "Server is running..",
+        environment: config.node_env,
+        uptime: process.uptime().toFixed(2) + " sec",
+        timeStamp: new Date().toISOString()
+    })
 });
 
 
+app.use(globalErrorHandler);
+
+app.use(notFound);
 
 export default app;
