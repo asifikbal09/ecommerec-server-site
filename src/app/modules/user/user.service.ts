@@ -28,6 +28,7 @@ const createUserIntoDB = async (req:Request)=>{
 
     return result;
 }
+
 const createAdminIntoDB = async (req:Request)=>{
      if (req.file) {
     const uploadResult = await fileUploader.uploadToCloudinary(req.file);
@@ -53,8 +54,34 @@ const createAdminIntoDB = async (req:Request)=>{
     return result;
 }
 
+const createManagerIntoDB = async (req:Request)=>{
+     if (req.file) {
+    const uploadResult = await fileUploader.uploadToCloudinary(req.file);
+    req.body.manager.imageUrl = uploadResult?.secure_url;
+  }
+    
+    const hashedPassword = await bcrypt.hash(req.body.password, Number(config.salt_rounds));
+
+    const result = await prisma.$transaction(async(tnx)=>{
+        await tnx.user.create({
+            data:{
+                email: req.body.manager.email,
+                password: hashedPassword,
+                role: RoleEnum.MANAGER
+            }
+        })
+
+        return await tnx.managerProfile.create({
+            data:req.body.manager
+        })
+    })
+
+    return result;
+}
+
 export const UserService ={
     createUserIntoDB,
-    createAdminIntoDB
+    createAdminIntoDB,
+    createManagerIntoDB
 
 }

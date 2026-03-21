@@ -26,8 +26,23 @@ const createAdmin = catchAsync(async (req, res) => {
         data: result
     })
 });
+const createManager = catchAsync(async (req, res) => {
+
+    const result = await UserService.createManagerIntoDB(req);
+
+
+    sendResponse(res,{
+        statusCode: 201,
+        success: true,
+        message: 'Manager created successfully',
+        data: result
+    })
+});
+
+
 
 export const UserController = {
     createUser,
-    createAdmin
+    createAdmin,
+    createManager
 }

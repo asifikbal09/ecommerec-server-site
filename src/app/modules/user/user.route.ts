@@ -10,8 +10,6 @@ router.post(
   "/create-user",
 fileUploader.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
-    console.log("object")
-    console.log({req})
     req.body = UserValidation.createUserValidationSchema.parse(
       JSON.parse(req.body.data),
     );
@@ -26,8 +24,6 @@ router.post(
   "/create-admin",
 fileUploader.upload.single("file"),
   (req: Request, res: Response, next: NextFunction) => {
-    console.log("object")
-    console.log({req})
     req.body = UserValidation.createAdminValidationSchema.parse(
       JSON.parse(req.body.data),
     );
@@ -36,6 +32,20 @@ fileUploader.upload.single("file"),
   },
 
   UserController.createAdmin,
+);
+router.post(
+  "/create-manager",
+fileUploader.upload.single("file"),
+  (req: Request, res: Response, next: NextFunction) => {
+
+    req.body = UserValidation.createManagerValidationSchema.parse(
+      JSON.parse(req.body.data),
+    );
+
+    next();
+  },
+
+  UserController.createManager,
 );
 
 export const UserRoutes:ExpressRouter = router;
