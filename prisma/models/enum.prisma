@@ -1,0 +1,18 @@
+enum RoleEnum {
+  USER
+  ADMIN
+  MANAGER
+  GUEST
+}
+
+enum GenderEnum {
+  MALE
+  FEMALE
+}
+
+enum SkinTypeEnum {
+  OILY
+  DRY
+  COMBINATION
+  NORMAL
+}

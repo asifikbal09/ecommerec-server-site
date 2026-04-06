@@ -1,0 +1,28 @@
+model Category {
+    id        String     @id @default(uuid())
+    name      String     @unique
+    products  Product[]
+    createdAt DateTime   @default(now())
+    updatedAt DateTime   @updatedAt
+
+    @@map("categories")
+}
+
+model Product {
+    id          String     @id @default(uuid())
+    title       String
+    imageUrl    String
+    description String
+    tags        String[]
+    price       Float
+    discountRate Float?
+    brand       String?
+    size        String?
+    skinType    SkinTypeEnum
+    categoryId  String
+    category    Category   @relation(fields: [categoryId], references: [id])
+    createdAt   DateTime   @default(now())
+    updatedAt   DateTime   @updatedAt
+
+    @@map("products")
+}
