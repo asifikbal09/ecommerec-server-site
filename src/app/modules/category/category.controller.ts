@@ -26,7 +26,20 @@ const getAllCategories = catchAsync(async (req, res) => {
     })
 })
 
+const getCategoryWiseProducts = catchAsync(async(req, res)=>{
+    const {categoryId} = req.params;
+    const result = await CategoryService.getCategoryWiseProductsFromDB(categoryId as string);
+
+    sendResponse(res,{
+        statusCode: 200,
+        success: true,
+        message: "Category wise products retrieved successfully",
+        data: result
+    })
+})
+
 export const CategoryController = {
   createCategory,
-  getAllCategories
+  getAllCategories,
+  getCategoryWiseProducts
 };

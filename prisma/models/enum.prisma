@@ -15,4 +15,5 @@ enum SkinTypeEnum {
   DRY
   COMBINATION
   NORMAL
+  ALL
 }

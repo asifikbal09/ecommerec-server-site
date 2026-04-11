@@ -18,7 +18,21 @@ const getAllCategoriesFromDB = async () => {
     return result;
 }
 
+const getCategoryWiseProductsFromDB = async (categoryId: string) => {
+    const result = await prisma.category.findUnique({
+        where: {
+            id: categoryId
+        },
+        include: {
+            products: true
+        }
+    })
+
+    return result;
+}
+
 export const CategoryService = {
   createCategoryIntoDB,
-  getAllCategoriesFromDB
+  getAllCategoriesFromDB,
+  getCategoryWiseProductsFromDB
 }
