@@ -23,6 +23,12 @@ const createProductIntoDB = async (req: Request) => {
   return result;
 };
 
+const getAllProductsFromDB = async () => {
+  const result = await prisma.product.findMany();
+  return result;
+};
+
 export const ProductService = {
   createProductIntoDB,
+  getAllProductsFromDB
 };
