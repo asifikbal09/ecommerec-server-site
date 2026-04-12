@@ -1,5 +1,7 @@
+import pick from "../../helper/pick";
 import catchAsync from "../../shared/catchAsync";
 import sendResponse from "../../shared/sendResponse";
+import { ProductFilterableFields } from "./product.constant";
 import { ProductService } from "./product.service";
 
 const createProduct = catchAsync(async (req, res) => {
@@ -14,13 +16,18 @@ const createProduct = catchAsync(async (req, res) => {
 })
 
 const getAllProducts = catchAsync(async (req, res) => {
-    const result = await ProductService.getAllProductsFromDB();
+
+    const options = pick(req.query, ['page', 'limit', 'sortBy', 'sortOrder']);
+    const filters = pick(req.query, ProductFilterableFields);
+
+    const result = await ProductService.getAllProductsFromDB(filters, options);
 
     sendResponse(res,{
         statusCode: 200,
         success: true,
         message: "Products retrieved successfully",
-        data: result
+        meta: result.meta,
+        data: result.data
     })  
 })  
 
